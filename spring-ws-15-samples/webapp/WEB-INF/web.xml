@@ -16,15 +16,7 @@
         <servlet-name>spring-ws</servlet-name>
         <url-pattern>/ws/*</url-pattern>
     </servlet-mapping>
-    <!-- 
-    <servlet>
-        <servlet-name>Resource</servlet-name>
-        <servlet-class>org.springframework.web.servlet.ResourceServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Resource</servlet-name>
-        <url-pattern>*.xsd</url-pattern>
-    </servlet-mapping>
-     -->
+    <!-- <servlet> <servlet-name>Resource</servlet-name> <servlet-class>org.springframework.web.servlet.ResourceServlet</servlet-class> 
+        <load-on-startup>1</load-on-startup> </servlet> <servlet-mapping> <servlet-name>Resource</servlet-name> <url-pattern>*.xsd</url-pattern> 
+        </servlet-mapping> -->
 </web-app>

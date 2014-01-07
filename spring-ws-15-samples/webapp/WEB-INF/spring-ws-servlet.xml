@@ -24,10 +24,6 @@
         <property name="unmarshaller" ref="jaxbMarshaller" />
     </bean>
     <bean id="payloadRootAnnotationMethodEndpointMapping" class="org.springframework.ws.server.endpoint.mapping.PayloadRootAnnotationMethodEndpointMapping" />
-    <!-- <bean id="genericMarshallingMethodEndpointAdapter" class="org.springframework.ws.server.endpoint.adapter.GenericMarshallingMethodEndpointAdapter"> 
-        <constructor-arg ref="jaxbMarshaller" /> </bean> <bean id="payloadRootQNameEndpointMapping" class="org.springframework.ws.server.endpoint.mapping.PayloadRootQNameEndpointMapping"> 
-        <property name="mappings"> <props> <prop key="{http://demo.sample/hello/schema}HelloRequest">helloEndpoint</prop> </props> 
-        </property> </bean> -->
     <!-- define message factory -->
     <bean id="messageFactory" class="org.springframework.ws.soap.saaj.SaajSoapMessageFactory" />
     <!-- define message ReceiverHandlerAdapter -->
@@ -47,20 +43,12 @@
             </list>
         </property>
     </bean>
-    <bean id="xsdSchemaHandlerAdapter" class="org.springframework.ws.transport.http.XsdSchemaHandlerAdapter" />
-    <bean id="schemaCollection" class="org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection">
-        <property name="xsds">
-            <list>
-                <value>classpath:/xsds/fake.xsd</value>
-            </list>
-        </property>
-        <property name="inline" value="true" />
-    </bean>
     <!-- Define WebService WSDL and XSD -->
     <bean id="HelloService" class="org.springframework.ws.wsdl.wsdl11.SimpleWsdl11Definition">
         <constructor-arg value="/ws/helloworld/HelloService.wsdl" />
     </bean>
+    <bean id="HelloMessage" class="org.springframework.xml.xsd.SimpleXsdSchema">
+        <property name="xsd" value="/ws/helloworld/HelloMessage.xsd" />
+    </bean>
     <bean id="helloEndpoint" class="demo.sample.endpoint.HelloEndpoint" />
-    <!-- helloEndpoint <bean id="HelloMessage" class="org.springframework.xml.xsd.SimpleXsdSchema"> <property name="xsd" 
-        value="/WEB-INF/wsdl/HelloMessage.xsd" /> </bean> -->
 </beans>
