@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- Available (Un)Marshaller -->
+    <bean name="contextPaths" class="java.util.ArrayList">
+        <constructor-arg index="0">
+            <list value-type="java.lang.String">
+                <value>demo.sample.entity</value>
+            </list>
+        </constructor-arg>
+    </bean>
+    <bean id="jaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+        <property name="contextPaths" ref="contextPaths" />
+        <property name="marshallerProperties">
+            <map>
+                <entry key="jaxb.formatted.output">
+                    <value type="java.lang.Boolean">true</value>
+                </entry>
+            </map>
+        </property>
+    </bean>
+    <bean id="marshallingMethodEndpointAdapter" class="org.springframework.ws.server.endpoint.adapter.MarshallingMethodEndpointAdapter">
+        <property name="marshaller" ref="jaxbMarshaller" />
+        <property name="unmarshaller" ref="jaxbMarshaller" />
+    </bean>
+    <bean id="payloadRootAnnotationMethodEndpointMapping" class="org.springframework.ws.server.endpoint.mapping.PayloadRootAnnotationMethodEndpointMapping" />
+    <!-- <bean id="genericMarshallingMethodEndpointAdapter" class="org.springframework.ws.server.endpoint.adapter.GenericMarshallingMethodEndpointAdapter"> 
+        <constructor-arg ref="jaxbMarshaller" /> </bean> <bean id="payloadRootQNameEndpointMapping" class="org.springframework.ws.server.endpoint.mapping.PayloadRootQNameEndpointMapping"> 
+        <property name="mappings"> <props> <prop key="{http://demo.sample/hello/schema}HelloRequest">helloEndpoint</prop> </props> 
+        </property> </bean> -->
+    <!-- define message factory -->
+    <bean id="messageFactory" class="org.springframework.ws.soap.saaj.SaajSoapMessageFactory" />
+    <!-- define message ReceiverHandlerAdapter -->
+    <bean class="org.springframework.ws.transport.http.WebServiceMessageReceiverHandlerAdapter">
+        <property name="messageFactory" ref="messageFactory" />
+    </bean>
+    <!-- define message dispacher -->
+    <bean id="messageDispatcher" class="org.springframework.ws.soap.server.SoapMessageDispatcher">
+        <property name="endpointMappings">
+            <list>
+                <ref bean="payloadRootAnnotationMethodEndpointMapping" />
+            </list>
+        </property>
+        <property name="endpointAdapters">
+            <list>
+                <ref bean="marshallingMethodEndpointAdapter" />
+            </list>
+        </property>
+    </bean>
+    <bean id="xsdSchemaHandlerAdapter" class="org.springframework.ws.transport.http.XsdSchemaHandlerAdapter" />
+    <bean id="schemaCollection" class="org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection">
+        <property name="xsds">
+            <list>
+                <value>classpath:/xsds/fake.xsd</value>
+            </list>
+        </property>
+        <property name="inline" value="true" />
+    </bean>
+    <!-- Define WebService WSDL and XSD -->
+    <bean id="HelloService" class="org.springframework.ws.wsdl.wsdl11.SimpleWsdl11Definition">
+        <constructor-arg value="/ws/helloworld/HelloService.wsdl" />
+    </bean>
+    <bean id="helloEndpoint" class="demo.sample.endpoint.HelloEndpoint" />
+    <!-- helloEndpoint <bean id="HelloMessage" class="org.springframework.xml.xsd.SimpleXsdSchema"> <property name="xsd" 
+        value="/WEB-INF/wsdl/HelloMessage.xsd" /> </bean> -->
+</beans>

@@ -1,0 +1,10 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://demo.sample/hello/schema"
+        targetNamespace="http://demo.sample/fake/schema">
+    <element name="HelloFake">
+        <complexType>
+            <sequence>
+                <element name="message" type="string" />
+            </sequence>
+        </complexType>
+    </element>
+</schema>
